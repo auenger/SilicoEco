@@ -1,0 +1,33 @@
+---
+const layers = [
+  ["Layer 0", "方向与路由", "组织规则、项目地图、角色与关键约束"],
+  ["Layer 1", "工作速查", "当前任务直接相关的模块、流程与决策"],
+  ["Layer 2", "深层事实", "代码、文档、历史、来源与完整业务规则"]
+];
+---
+
+<section class="knowledge-section section" id="knowledge">
+  <div class="container knowledge-grid">
+    <div class="knowledge-art" data-reveal>
+      <div class="knowledge-axis" aria-hidden="true"></div>
+      {layers.map(([code, title, body], index) => (
+        <article class={`knowledge-layer layer-${index + 1}`}>
+          <span>{code}</span>
+          <h3>{title}</h3>
+          <p>{body}</p>
+        </article>
+      ))}
+    </div>
+
+    <div class="knowledge-copy" data-reveal>
+      <h2>知识不是聊天记录的总和。</h2>
+      <p>Agent 先理解地图，再加载与任务有关的局部知识，必要时下钻真实来源。工作结束后，新的事实、决策和方法继续写回。</p>
+      <div class="knowledge-definitions">
+        <div><strong>Memory</strong><span>服务一个 Actor 的连续性</span></div>
+        <div><strong>Knowledge</strong><span>服务整个组织的未来工作</span></div>
+        <div><strong>History</strong><span>保存真实发生过的过程</span></div>
+        <div><strong>Context</strong><span>为当前任务选择有效切片</span></div>
+      </div>
+    </div>
+  </div>
+</section>

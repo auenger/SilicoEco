@@ -1,0 +1,41 @@
+---
+const roles = [
+  ["规划", "把意图变成可执行路径"],
+  ["执行", "完成清晰定义的工作"],
+  ["审查", "验证质量与风险"],
+  ["知识", "让经验进入下一次任务"]
+];
+---
+
+<section class="organization-section section" id="organization">
+  <div class="container organization-grid">
+    <div class="organization-copy" data-reveal>
+      <h2>Agent 不再是按钮。<br />它是数字工作者。</h2>
+      <p>Agent 拥有身份、角色、能力、知识边界和人类责任人。模型可以更换，运行位置可以迁移，组织身份保持连续。</p>
+      <div class="identity-rule">
+        <span>Agent</span>
+        <strong>身份 + 角色 + 能力 + 知识 + 责任人</strong>
+      </div>
+    </div>
+
+    <div class="team-orbit" data-reveal aria-label="人类负责人和四种 Agent 角色组成混合团队">
+      <div class="human-node">
+        <span class="person-glyph" aria-hidden="true"><i></i></span>
+        <strong>人类负责人</strong>
+        <small>方向与最终责任</small>
+      </div>
+      {roles.map(([name, detail], index) => (
+        <article class={`role-node role-${index + 1}`}>
+          <span class="agent-glyph" aria-hidden="true"><i></i></span>
+          <strong>{name}</strong>
+          <small>{detail}</small>
+        </article>
+      ))}
+      <svg viewBox="0 0 700 700" aria-hidden="true">
+        <circle cx="350" cy="350" r="242"></circle>
+        <circle cx="350" cy="350" r="126"></circle>
+        <path class="focus" d="M350 108V224M350 476v116M108 350h116M476 350h116"></path>
+      </svg>
+    </div>
+  </div>
+</section>

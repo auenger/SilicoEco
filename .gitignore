@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+
+# Astro build and cache
+dist/
+.astro/
+
+# environment files
+.env
+.env.*
+!.env.example
+
+# local tooling
+.DS_Store
+*.log
+.idea/
+.vscode/
+
+# test artifacts
+coverage/
+playwright-report/
+test-results/

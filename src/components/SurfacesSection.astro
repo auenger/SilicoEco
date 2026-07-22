@@ -1,0 +1,27 @@
+---
+const surfaces = [
+  ["Desktop", "个人工作的主控制台，本地资源、复杂产物和长任务集中呈现。"],
+  ["Web", "团队共享工作空间，跨设备协作、项目管理和组织治理。"],
+  ["Terminal", "高密度 Agent 工作面，适合深度任务、开发与自动化。"],
+  ["Browser", "真实业务行动环境，让人随时观察、批准与接管。"],
+  ["IM", "轻量协作与快速决策入口，状态仍回到同一个 Task。"]
+];
+---
+
+<section class="surfaces-section section" id="surfaces">
+  <div class="container">
+    <div class="section-copy compact-copy" data-reveal>
+      <h2>一个 OS。多个入口。</h2>
+      <p>桌面、Web、终端、浏览器和 IM 不是五套产品。它们是同一个工作世界的不同 Shell。</p>
+    </div>
+    <div class="surface-track" data-reveal>
+      {surfaces.map(([name, body], index) => (
+        <article class="surface-item">
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <h3>{name}</h3>
+          <p>{body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

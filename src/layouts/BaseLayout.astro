@@ -1,0 +1,76 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "SilicoEco | 人类与 Agent 的组织操作系统",
+  description = "SilicoEco 让人类、Agent、知识、应用和工作流在统一任务、统一上下文和统一治理下协作。"
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f2f4f8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#090b0f" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <script is:inline>
+      (() => {
+        const stored = localStorage.getItem("silico-theme");
+        if (stored === "light" || stored === "dark") {
+          document.documentElement.dataset.theme = stored;
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+    <script>
+      const root = document.documentElement;
+      const toggle = document.querySelector<HTMLButtonElement>("[data-theme-toggle]");
+      const nav = document.querySelector<HTMLElement>("[data-nav]");
+      const hero = document.querySelector<HTMLElement>("[data-hero]");
+
+      toggle?.addEventListener("click", () => {
+        const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const currentDark = root.dataset.theme === "dark" || (!root.dataset.theme && systemDark);
+        const next = currentDark ? "light" : "dark";
+        root.dataset.theme = next;
+        localStorage.setItem("silico-theme", next);
+        toggle.setAttribute("aria-label", next === "dark" ? "切换到浅色主题" : "切换到深色主题");
+      });
+
+      if (nav && hero) {
+        const navObserver = new IntersectionObserver(([entry]) => {
+          nav.classList.toggle("is-scrolled", !entry.isIntersecting);
+        }, { threshold: 0.82 });
+        navObserver.observe(hero);
+      }
+
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const revealElements = document.querySelectorAll<HTMLElement>("[data-reveal]");
+
+      if (!reduceMotion && "IntersectionObserver" in window) {
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.14, rootMargin: "0px 0px -48px" });
+        revealElements.forEach((element) => revealObserver.observe(element));
+      } else {
+        revealElements.forEach((element) => element.classList.add("is-visible"));
+      }
+    </script>
+  </body>
+</html>

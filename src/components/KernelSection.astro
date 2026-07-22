@@ -1,0 +1,55 @@
+---
+const kernels = [
+  {
+    code: "WORK",
+    title: "把意图变成真正的工作",
+    body: "管理目标、任务、依赖、执行、进度、产物和完成标准。",
+    tags: ["Intent", "Task", "Run", "Evidence"]
+  },
+  {
+    code: "CONTEXT",
+    title: "只加载此刻真正需要知道的",
+    body: "连接项目事实、组织知识、过去决策与当前环境。",
+    tags: ["Knowledge", "Memory", "History", "Route"]
+  },
+  {
+    code: "COORDINATION",
+    title: "让人和 Agent 形成工作关系",
+    body: "处理分配、委派、并行、交接、讨论和人工介入。",
+    tags: ["Actor", "Role", "Handoff", "Schedule"]
+  },
+  {
+    code: "GOVERNANCE",
+    title: "让自主始终拥有边界",
+    body: "管理身份、权限、审批、风险、预算、责任和审计。",
+    tags: ["Identity", "Policy", "Approval", "Audit"]
+  }
+];
+---
+
+<section class="system-section section" id="system">
+  <div class="container">
+    <div class="section-copy" data-reveal>
+      <h2>四个内核。<br />一个工作世界。</h2>
+      <p>界面、模型和工具可以变化。SilicoEco 的核心始终围绕工作、上下文、协同和治理运行。</p>
+    </div>
+
+    <div class="kernel-stack">
+      {kernels.map((kernel, index) => (
+        <article class="kernel-panel" data-reveal style={`--panel-index:${index}`}>
+          <div class="kernel-code">{kernel.code}</div>
+          <div class="kernel-body">
+            <h3>{kernel.title}</h3>
+            <p>{kernel.body}</p>
+          </div>
+          <div class="kernel-tags">
+            {kernel.tags.map((tag) => <span>{tag}</span>)}
+          </div>
+          <div class="kernel-pixels" aria-hidden="true">
+            {Array.from({ length: 16 }).map(() => <i></i>)}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

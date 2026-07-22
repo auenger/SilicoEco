@@ -1,0 +1,25 @@
+---
+const levels = [
+  ["只读建议", "理解环境并给出判断，不改变外部状态。"],
+  ["生成草稿", "准备内容与行动方案，由人确认后提交。"],
+  ["关键动作审批", "日常步骤自主，高风险行动交给负责人。"],
+  ["边界内自主", "在明确角色、数据范围、预算和停止条件内持续工作。"]
+];
+---
+
+<section class="governance-section section" id="governance">
+  <div class="container governance-grid">
+    <div class="governance-copy" data-reveal>
+      <h2>自主，不代表失去控制。</h2>
+      <p>SilicoEco 把能力与权限分开。Agent 知道如何行动，不代表它已经获得行动许可。</p>
+    </div>
+    <div class="autonomy-ladder" data-reveal>
+      {levels.map(([title, body], index) => (
+        <article style={`--level:${index}`}>
+          <span></span>
+          <div><strong>{title}</strong><p>{body}</p></div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
