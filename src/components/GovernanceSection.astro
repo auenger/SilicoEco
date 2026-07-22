@@ -1,17 +1,17 @@
 ---
 const levels = [
-  ["只读建议", "理解环境并给出判断，不改变外部状态。"],
-  ["生成草稿", "准备内容与行动方案，由人确认后提交。"],
-  ["关键动作审批", "日常步骤自主，高风险行动交给负责人。"],
-  ["边界内自主", "在明确角色、数据范围、预算和停止条件内持续工作。"]
+  ["岗位职责", "明确 AI 员工负责什么、不负责什么，以及由谁承担最终责任。"],
+  ["SOP 与能力", "规定可执行流程、可调用工具、可访问数据和完成标准。"],
+  ["协作与升级", "允许 Agent 向人类发布任务，在关键节点请求判断和审批。"],
+  ["审计与追责", "记录任务来源、执行过程、决策依据、产物和责任归属。"]
 ];
 ---
 
 <section class="governance-section section" id="governance">
   <div class="container governance-grid">
     <div class="governance-copy" data-reveal>
-      <h2>自主，不代表失去控制。</h2>
-      <p>SilicoEco 把能力与权限分开。Agent 知道如何行动，不代表它已经获得行动许可。</p>
+      <h2>自主始终服从岗位和责任边界。</h2>
+      <p>SilicoEco 把能力、权限和责任分开管理。Agent 知道如何行动，不代表它已经获得行动许可。</p>
     </div>
     <div class="autonomy-ladder" data-reveal>
       {levels.map(([title, body], index) => (

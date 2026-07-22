@@ -1,20 +1,22 @@
 ---
 const layers = [
-  ["Layer 0", "方向与路由", "组织规则、项目地图、角色与关键约束"],
-  ["Layer 1", "工作速查", "当前任务直接相关的模块、流程与决策"],
-  ["Layer 2", "深层事实", "代码、文档、历史、来源与完整业务规则"]
+  ["Layer 0", "方向与路由", "组织规则、项目地图、角色与关键约束", "全局导航"],
+  ["Layer 1", "工作速查", "当前任务直接相关的模块、流程与决策", "任务切片"],
+  ["Layer 2", "深层事实", "代码、文档、历史、来源与完整业务规则", "事实来源"]
 ];
 ---
 
 <section class="knowledge-section section" id="knowledge">
   <div class="container knowledge-grid">
     <div class="knowledge-art" data-reveal>
-      <div class="knowledge-axis" aria-hidden="true"></div>
-      {layers.map(([code, title, body], index) => (
+      {layers.map(([code, title, body, scope], index) => (
         <article class={`knowledge-layer layer-${index + 1}`}>
-          <span>{code}</span>
-          <h3>{title}</h3>
-          <p>{body}</p>
+          <span class="layer-code">{code}</span>
+          <div class="layer-content">
+            <h3>{title}</h3>
+            <p>{body}</p>
+          </div>
+          <strong>{scope}</strong>
         </article>
       ))}
     </div>

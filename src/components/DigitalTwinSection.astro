@@ -1,0 +1,26 @@
+---
+const accessLayers = [
+  ["身份与职责", "说明这个员工负责什么、如何协作、何时可以被联系。"],
+  ["授权知识", "开放经过本人和组织授权的经验、项目背景、业务规则与常见判断，供协作者直接访问。"],
+  ["协作能力", "其他人类员工或 AI 员工可以直接提问、获取信息、发起协作或创建任务。"],
+  ["访问边界", "敏感信息、私有记忆和高风险操作继续受到权限、审批与审计控制。"]
+];
+---
+
+<section class="digital-twin-section section" id="digital-twin">
+  <div class="container twin-layout">
+    <div class="twin-copy" data-reveal>
+      <h2>每位员工，都可以开放自己的 AI 分身。</h2>
+      <p>AI 分身代表员工提供持续可用的知识与协作入口。它不复制全部个人信息，只开放经过授权的内容和能力。</p>
+    </div>
+
+    <div class="twin-access" data-reveal>
+      {accessLayers.map(([title, body]) => (
+        <article>
+          <h3>{title}</h3>
+          <p>{body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

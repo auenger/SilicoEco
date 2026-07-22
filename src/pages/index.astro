@@ -2,9 +2,14 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import Hero from "../components/Hero.astro";
+import EcosystemSection from "../components/EcosystemSection.astro";
+import UpgradeStatement from "../components/UpgradeStatement.astro";
+import EcosystemExamples from "../components/EcosystemExamples.astro";
 import WorkLoop from "../components/WorkLoop.astro";
 import KernelSection from "../components/KernelSection.astro";
 import OrganizationSection from "../components/OrganizationSection.astro";
+import BoundarySection from "../components/BoundarySection.astro";
+import DigitalTwinSection from "../components/DigitalTwinSection.astro";
 import KnowledgeSection from "../components/KnowledgeSection.astro";
 import SurfacesSection from "../components/SurfacesSection.astro";
 import GovernanceSection from "../components/GovernanceSection.astro";
@@ -15,15 +20,14 @@ import SiteFooter from "../components/SiteFooter.astro";
   <SiteHeader />
   <main>
     <Hero />
-    <section class="manifesto section">
-      <div class="container manifesto-grid">
-        <p data-reveal>不是聊天机器人<br />不是 Agent 工具箱<br />不是新的 IM</p>
-        <h2 data-reveal>传统操作系统管理计算资源。SilicoEco 管理<span>意图、任务、角色、上下文、能力、决策与组织知识</span>。</h2>
-      </div>
-    </section>
+    <EcosystemSection />
+    <UpgradeStatement />
+    <EcosystemExamples />
     <WorkLoop />
     <KernelSection />
     <OrganizationSection />
+    <BoundarySection />
+    <DigitalTwinSection />
     <KnowledgeSection />
     <SurfacesSection />
     <GovernanceSection />

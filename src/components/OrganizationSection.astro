@@ -1,28 +1,28 @@
 ---
 const roles = [
-  ["规划", "把意图变成可执行路径"],
-  ["执行", "完成清晰定义的工作"],
-  ["审查", "验证质量与风险"],
-  ["知识", "让经验进入下一次任务"]
+  ["人类员工", "目标、判断与最终责任"],
+  ["AI 员工", "执行、协作与持续响应"],
+  ["主管 Agent", "分派、协调与升级处理"],
+  ["审查 Agent", "验证边界、质量与证据"]
 ];
 ---
 
-<section class="organization-section section" id="organization">
+<section class="organization-section section" id="ai-workforce">
   <div class="container organization-grid">
     <div class="organization-copy" data-reveal>
-      <h2>Agent 不再是按钮。<br />它是数字工作者。</h2>
-      <p>Agent 拥有身份、角色、能力、知识边界和人类责任人。模型可以更换，运行位置可以迁移，组织身份保持连续。</p>
+      <h2>OS 管理每一位 AI 员工的职责。</h2>
+      <p>每个 Agent 都有岗位、工作职责、业务 SOP、能力范围、数据边界和人类负责人。模型和运行位置可以更换，组织身份保持连续。</p>
       <div class="identity-rule">
-        <span>Agent</span>
-        <strong>身份 + 角色 + 能力 + 知识 + 责任人</strong>
+        <span>AI Employee</span>
+        <strong>岗位 + 职责 + SOP + 权限 + 责任人</strong>
       </div>
     </div>
 
-    <div class="team-orbit" data-reveal aria-label="人类负责人和四种 Agent 角色组成混合团队">
+    <div class="team-orbit" data-reveal aria-label="人类员工与不同职责的 AI 员工组成混合团队">
       <div class="human-node">
         <span class="person-glyph" aria-hidden="true"><i></i></span>
-        <strong>人类负责人</strong>
-        <small>方向与最终责任</small>
+        <strong>组织目标</strong>
+        <small>统一任务与责任关系</small>
       </div>
       {roles.map(([name, detail], index) => (
         <article class={`role-node role-${index + 1}`}>

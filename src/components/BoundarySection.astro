@@ -1,0 +1,37 @@
+---
+const humanBoundary = [
+  "定义目标、优先级和完成标准",
+  "处理高风险、敏感和不可逆决策",
+  "对业务结果承担最终责任"
+];
+
+const agentBoundary = [
+  "按照岗位职责和 SOP 持续执行",
+  "在授权范围内调用工具和数据",
+  "发现异常时停止、升级并保留证据"
+];
+---
+
+<section class="boundary-section section" id="boundaries">
+  <div class="container boundary-heading" data-reveal>
+    <h2>人和 Agent 各有边界，也能彼此派发工作。</h2>
+    <p>Task 是双向协作协议。人类可以委派 Agent，Agent 也可以向人类员工发布任务、请求判断或发起审批。</p>
+  </div>
+
+  <div class="container boundary-map" data-reveal>
+    <article class="boundary-side human-boundary">
+      <h3>人类员工负责</h3>
+      {humanBoundary.map((item) => <p>{item}</p>)}
+    </article>
+
+    <div class="boundary-exchange">
+      <div><strong>人类发布任务</strong><span>目标、约束、授权、验收</span></div>
+      <div><strong>Agent 发布任务</strong><span>补充信息、业务判断、审批、线下行动</span></div>
+    </div>
+
+    <article class="boundary-side agent-boundary">
+      <h3>AI 员工负责</h3>
+      {agentBoundary.map((item) => <p>{item}</p>)}
+    </article>
+  </div>
+</section>

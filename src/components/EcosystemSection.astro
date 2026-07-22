@@ -1,0 +1,25 @@
+---
+const ecosystems = [
+  ["AI 员工", "为 Agent 建立岗位、职责、工作目标、SOP、能力范围和人类负责人。"],
+  ["业务 SOP", "把企业流程变成可分配、可执行、可检查、可持续改进的任务轨道。"],
+  ["应用与运行时", "桌面、Web、浏览器、服务、二进制和 CLI 共享身份、上下文与任务状态。"],
+  ["MCP + Skills", "通过开放协议连接外部 Agent 与应用，同时保留权限、审批和审计边界。"],
+  ["协作渠道", "IM、App 和终端都是工作入口，讨论、进度、决策和产物最终回到 Task。"],
+  ["组织治理", "OS 统一管理人类与 Agent 的岗位关系、授权范围、责任归属和工作证据。"]
+];
+---
+
+<section class="ecosystem-section section" id="ecosystem">
+  <div class="container ecosystem-heading" data-reveal>
+    <h2>连接所有产品形态，<br />运行同一套组织规则。</h2>
+    <p>Agent 可以来自不同平台和运行环境，但进入 SilicoEco 后，都按照组织身份、业务 SOP 和职责边界工作。</p>
+  </div>
+  <div class="container ecosystem-grid" data-reveal>
+    {ecosystems.map(([name, body], index) => (
+      <article class={`ecosystem-capability capability-${index + 1}`}>
+        <h3>{name}</h3>
+        <p>{body}</p>
+      </article>
+    ))}
+  </div>
+</section>

@@ -1,23 +1,23 @@
 ---
 const surfaces = [
-  ["Desktop", "个人工作的主控制台，本地资源、复杂产物和长任务集中呈现。"],
-  ["Web", "团队共享工作空间，跨设备协作、项目管理和组织治理。"],
-  ["Terminal", "高密度 Agent 工作面，适合深度任务、开发与自动化。"],
-  ["Browser", "真实业务行动环境，让人随时观察、批准与接管。"],
-  ["IM", "轻量协作与快速决策入口，状态仍回到同一个 Task。"]
+  ["AI 员工平台", "数字员工进入岗位体系，接受职责、SOP、任务分工、权限和审计管理。"],
+  ["桌面与 Web", "个人工作台与团队空间共享项目、身份、任务和组织知识。"],
+  ["Agent Runtime", "本地进程、服务、二进制与 CLI 可以承接长任务和自动化工作。"],
+  ["Browser Agent", "Agent 在真实业务系统中行动，人类可以观察、审批和接管。"],
+  ["MCP + Skills", "组织能力通过标准协议开放给内部和外部 Agent 安全调用。"],
+  ["IM + CLI", "沟通渠道可以创建、更新和接收任务，但状态始终回到统一平台。"]
 ];
 ---
 
 <section class="surfaces-section section" id="surfaces">
   <div class="container">
     <div class="section-copy compact-copy" data-reveal>
-      <h2>一个 OS。多个入口。</h2>
-      <p>桌面、Web、终端、浏览器和 IM 不是五套产品。它们是同一个工作世界的不同 Shell。</p>
+      <h2>生态可以不同，工作始终相通。</h2>
+      <p>平台不限定用户从哪里开始。所有入口共享 Task、Actor、Context、Policy 与 Knowledge。</p>
     </div>
     <div class="surface-track" data-reveal>
-      {surfaces.map(([name, body], index) => (
+      {surfaces.map(([name, body]) => (
         <article class="surface-item">
-          <span>{String(index + 1).padStart(2, "0")}</span>
           <h3>{name}</h3>
           <p>{body}</p>
         </article>

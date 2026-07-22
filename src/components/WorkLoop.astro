@@ -1,35 +1,32 @@
 ---
 const steps = [
-  ["Intent", "说出真正想改变的事情"],
-  ["Task", "转化为可负责的工作"],
-  ["Action", "由人和 Agent 共同执行"],
-  ["Evidence", "用事实与产物证明结果"],
-  ["Decision", "人在关键节点做判断"],
-  ["Knowledge", "把经验写回组织"]
+  ["业务目标", "明确流程希望改变的结果"],
+  ["SOP 拆解", "转化为可执行的标准步骤"],
+  ["责任分配", "交给合适的人类或 AI 员工"],
+  ["协作执行", "共享状态、上下文和产物"],
+  ["人工决策", "关键节点由责任人判断"],
+  ["持续改进", "把经验写回 SOP 与知识库"]
 ];
 ---
 
 <section class="work-loop section" id="loop">
   <div class="container">
     <div class="section-copy compact-copy" data-reveal>
-      <h2>工作，不再消失在对话里。</h2>
-      <p>每一个模糊意图，都能成为有目标、有责任、有过程、有证据，并且能继续生长的工作。</p>
+      <h2>让业务 SOP 成为 AI 员工的工作轨道。</h2>
+      <p>流程不再停留在文档里。它会转化为任务、责任、检查点、证据和可以持续改进的组织能力。</p>
     </div>
     <div class="loop-stage" data-reveal>
-      <svg class="loop-wire" viewBox="0 0 1200 230" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M45 115H1155"></path>
-        <path class="active" d="M45 115H1155"></path>
-      </svg>
+      <div class="loop-progress" aria-hidden="true">
+        {steps.map(() => <i></i>)}
+      </div>
       <div class="loop-items">
         {steps.map(([name, detail]) => (
           <article class="loop-item">
-            <span class="loop-point"></span>
             <strong>{name}</strong>
             <p>{detail}</p>
           </article>
         ))}
       </div>
-      <div class="loop-return"><span>下一项工作</span><i></i></div>
     </div>
   </div>
 </section>
