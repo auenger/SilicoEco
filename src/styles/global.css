@@ -184,6 +184,39 @@ h3 {
   letter-spacing: -0.03em;
 }
 
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  justify-self: start;
+  gap: 14px;
+}
+
+.parent-brand-link {
+  position: relative;
+  padding-left: 14px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 560;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  transition: color 160ms ease;
+}
+
+.parent-brand-link::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 1px;
+  height: 18px;
+  background: var(--line-strong);
+  content: "";
+  transform: translateY(-50%);
+}
+
+.parent-brand-link:hover {
+  color: var(--ink);
+}
+
 .brand-symbol {
   display: grid;
   grid-template-columns: repeat(2, 7px);
@@ -443,6 +476,29 @@ h3 {
   font-weight: 650;
   letter-spacing: 0.25em;
   text-transform: uppercase;
+}
+
+.hero-signature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-signature a {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  transition: color 160ms ease;
+}
+
+.hero-signature a:hover {
+  color: var(--ink);
+}
+
+.hero-signature i {
+  width: 22px;
+  height: 1px;
+  background: var(--line-strong);
 }
 
 .hero h1 {
@@ -1189,6 +1245,40 @@ h3 {
   font-size: 12px;
 }
 
+.footer-brand-lockup {
+  display: grid;
+  gap: 8px;
+  justify-self: start;
+}
+
+.footer-brand-lockup > a {
+  width: max-content;
+  color: color-mix(in srgb, var(--on-accent) 70%, transparent);
+  font-size: 11px;
+  transition: color 160ms ease;
+}
+
+.footer-brand-lockup > a:hover,
+.footer-company a:hover {
+  color: var(--on-accent);
+}
+
+.footer-company {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) auto auto;
+  gap: 28px;
+  align-items: center;
+  padding-top: 18px;
+  padding-bottom: 26px;
+  color: color-mix(in srgb, var(--on-accent) 68%, transparent);
+  font-size: 11px;
+}
+
+.footer-company a {
+  color: inherit;
+  transition: color 160ms ease;
+}
+
 [data-reveal] {
   opacity: 0;
   transform: translateY(34px);
@@ -1298,11 +1388,22 @@ h3 {
     min-height: 150px;
   }
   .footer-bottom nav { display: none; }
+  .footer-company {
+    grid-template-columns: 1fr;
+    gap: 7px;
+    padding-top: 0;
+    padding-bottom: 30px;
+  }
 }
 
 @media (max-width: 560px) {
   .nav-actions .button { display: none; }
   .nav { min-height: 66px; }
+  .brand-lockup { gap: 9px; }
+  .parent-brand-link { padding-left: 9px; font-size: 10px; }
+  .hero-signature { gap: 8px; }
+  .hero-signature a { font-size: 9px; letter-spacing: 0.08em; }
+  .hero-signature i { width: 12px; }
   .hero { min-height: 820px; }
   .hero::before { background-size: 48px 48px; }
   .hero h1 { font-size: clamp(51px, 17vw, 80px); }
