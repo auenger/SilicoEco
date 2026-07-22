@@ -1375,6 +1375,11 @@ h3 {
   background: var(--bg);
 }
 
+.hero-shell {
+  position: relative;
+  z-index: 1;
+}
+
 .hero::before {
   opacity: 0.12;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 62%, transparent);

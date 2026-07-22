@@ -1,0 +1,329 @@
+<div class="hero-particle-field" data-particle-field aria-hidden="true">
+  <canvas data-particle-canvas></canvas>
+</div>
+
+<script>
+  import {
+    BufferAttribute,
+    BufferGeometry,
+    Color,
+    LineBasicMaterial,
+    LineSegments,
+    PerspectiveCamera,
+    Points,
+    Scene,
+    ShaderMaterial,
+    WebGLRenderer
+  } from "three";
+
+  const field = document.querySelector<HTMLElement>("[data-particle-field]");
+  const canvas = field?.querySelector<HTMLCanvasElement>("[data-particle-canvas]");
+
+  if (field && canvas) {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let renderer: WebGLRenderer | undefined;
+
+    try {
+      renderer = new WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: false,
+        powerPreference: "high-performance"
+      });
+    } catch {
+      field.hidden = true;
+    }
+
+    if (renderer) {
+      const scene = new Scene();
+      const camera = new PerspectiveCamera(42, 1, 0.1, 100);
+      camera.position.set(0, 5.5, 9.6);
+      camera.lookAt(0, -0.15, -0.5);
+
+      const compact = window.matchMedia("(max-width: 820px)").matches;
+      const columns = compact ? 56 : 88;
+      const rows = compact ? 38 : 58;
+      const width = compact ? 15 : 19;
+      const depth = compact ? 13 : 14;
+      const count = columns * rows;
+      const positions = new Float32Array(count * 3);
+      const basePositions = new Float32Array(count * 3);
+      const roles = new Float32Array(count);
+      const phases = new Float32Array(count);
+
+      const highlighted = [
+        [0.07, 0.23, 1], [0.13, 0.58, 2], [0.2, 0.78, 1],
+        [0.27, 0.36, 2], [0.34, 0.63, 1], [0.41, 0.18, 2],
+        [0.47, 0.82, 2], [0.53, 0.46, 1], [0.6, 0.68, 2],
+        [0.66, 0.26, 1], [0.73, 0.51, 2], [0.79, 0.77, 1],
+        [0.85, 0.19, 2], [0.9, 0.43, 1], [0.95, 0.69, 2]
+      ];
+
+      const specialIndices: number[] = [];
+      highlighted.forEach(([xRatio, zRatio, role]) => {
+        const column = Math.min(columns - 1, Math.round(xRatio * (columns - 1)));
+        const row = Math.min(rows - 1, Math.round(zRatio * (rows - 1)));
+        const index = row * columns + column;
+        roles[index] = role;
+        specialIndices.push(index);
+      });
+
+      for (let row = 0; row < rows; row += 1) {
+        for (let column = 0; column < columns; column += 1) {
+          const index = row * columns + column;
+          const offset = index * 3;
+          const x = (column / (columns - 1) - 0.5) * width;
+          const z = (row / (rows - 1) - 0.5) * depth;
+          positions[offset] = x;
+          positions[offset + 1] = 0;
+          positions[offset + 2] = z;
+          basePositions[offset] = x;
+          basePositions[offset + 1] = 0;
+          basePositions[offset + 2] = z;
+          phases[index] = ((column * 17 + row * 29) % 31) / 31;
+        }
+      }
+
+      const geometry = new BufferGeometry();
+      geometry.setAttribute("position", new BufferAttribute(positions, 3));
+      geometry.setAttribute("aRole", new BufferAttribute(roles, 1));
+      geometry.setAttribute("aPhase", new BufferAttribute(phases, 1));
+
+      const material = new ShaderMaterial({
+        transparent: true,
+        depthWrite: false,
+        uniforms: {
+          uTime: { value: 0 },
+          uPixelRatio: { value: Math.min(window.devicePixelRatio, 1.8) },
+          uBaseColor: { value: new Color() },
+          uHumanColor: { value: new Color() },
+          uAgentColor: { value: new Color() },
+          uBaseAlpha: { value: 0.32 }
+        },
+        vertexShader: `
+          attribute float aRole;
+          attribute float aPhase;
+          uniform float uTime;
+          uniform float uPixelRatio;
+          varying float vRole;
+          varying float vPulse;
+
+          float waveHeight(vec3 p) {
+            float broad = sin(p.x * 0.58 + uTime * 0.38) * 0.34;
+            float cross = cos(p.z * 0.72 - uTime * 0.31) * 0.24;
+            float detail = sin((p.x + p.z) * 0.42 + uTime * 0.24) * 0.13;
+            return broad + cross + detail;
+          }
+
+          void main() {
+            vec3 transformed = position;
+            transformed.y = waveHeight(position);
+            float pulse = 0.5 + 0.5 * sin(uTime * 1.35 + aPhase * 12.0);
+            vec4 mvPosition = modelViewMatrix * vec4(transformed, 1.0);
+            float ambientSize = mix(2.35, 3.15, pulse);
+            float baseSize = aRole < 0.5 ? ambientSize : mix(10.5, 15.5, pulse);
+            gl_PointSize = baseSize * uPixelRatio * (8.2 / -mvPosition.z);
+            gl_Position = projectionMatrix * mvPosition;
+            vRole = aRole;
+            vPulse = pulse;
+          }
+        `,
+        fragmentShader: `
+          uniform vec3 uBaseColor;
+          uniform vec3 uHumanColor;
+          uniform vec3 uAgentColor;
+          uniform float uBaseAlpha;
+          varying float vRole;
+          varying float vPulse;
+
+          void main() {
+            vec2 point = gl_PointCoord - 0.5;
+
+            if (vRole < 0.5) {
+              float distanceToCenter = length(point);
+              float alpha = smoothstep(0.5, 0.06, distanceToCenter) * uBaseAlpha;
+              gl_FragColor = vec4(uBaseColor, alpha);
+              return;
+            }
+
+            if (vRole < 1.5) {
+              float distanceToCenter = length(point);
+              float core = smoothstep(0.24, 0.02, distanceToCenter);
+              float glow = smoothstep(0.5, 0.06, distanceToCenter) * 0.58;
+              float alpha = min(1.0, core + glow) * (0.82 + vPulse * 0.18);
+              gl_FragColor = vec4(uHumanColor, alpha);
+              return;
+            }
+
+            float squareDistance = max(abs(point.x), abs(point.y));
+            float core = smoothstep(0.2, 0.05, squareDistance);
+            float glow = smoothstep(0.5, 0.08, length(point)) * 0.66;
+            float alpha = min(1.0, core + glow) * (0.84 + vPulse * 0.16);
+            gl_FragColor = vec4(uAgentColor, alpha);
+          }
+        `
+      });
+
+      const carpet = new Points(geometry, material);
+      carpet.rotation.x = -0.035;
+      carpet.position.set(0.6, -0.82, -1.1);
+      scene.add(carpet);
+
+      const connections: Array<[number, number]> = [];
+      specialIndices.forEach((sourceIndex, sourcePosition) => {
+        let nearestIndex = -1;
+        let nearestDistance = Number.POSITIVE_INFINITY;
+        specialIndices.forEach((targetIndex, targetPosition) => {
+          if (sourcePosition === targetPosition || roles[sourceIndex] === roles[targetIndex]) return;
+          const sx = basePositions[sourceIndex * 3];
+          const sz = basePositions[sourceIndex * 3 + 2];
+          const tx = basePositions[targetIndex * 3];
+          const tz = basePositions[targetIndex * 3 + 2];
+          const distance = Math.hypot(sx - tx, sz - tz);
+          if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestIndex = targetIndex;
+          }
+        });
+        if (nearestIndex >= 0) {
+          const pair: [number, number] = sourceIndex < nearestIndex
+            ? [sourceIndex, nearestIndex]
+            : [nearestIndex, sourceIndex];
+          if (!connections.some(([a, b]) => a === pair[0] && b === pair[1])) connections.push(pair);
+        }
+      });
+
+      const linePositions = new Float32Array(connections.length * 6);
+      const lineGeometry = new BufferGeometry();
+      lineGeometry.setAttribute("position", new BufferAttribute(linePositions, 3));
+      const lineMaterial = new LineBasicMaterial({
+        color: 0x3978f6,
+        transparent: true,
+        opacity: 0.16,
+        depthWrite: false
+      });
+      const connectionLines = new LineSegments(lineGeometry, lineMaterial);
+      connectionLines.position.copy(carpet.position);
+      connectionLines.rotation.copy(carpet.rotation);
+      scene.add(connectionLines);
+
+      const waveHeight = (x: number, z: number, time: number) => (
+        Math.sin(x * 0.58 + time * 0.38) * 0.34
+        + Math.cos(z * 0.72 - time * 0.31) * 0.24
+        + Math.sin((x + z) * 0.42 + time * 0.24) * 0.13
+      );
+
+      const updateConnections = (time: number) => {
+        connections.forEach(([source, target], index) => {
+          const offset = index * 6;
+          const sx = basePositions[source * 3];
+          const sz = basePositions[source * 3 + 2];
+          const tx = basePositions[target * 3];
+          const tz = basePositions[target * 3 + 2];
+          linePositions[offset] = sx;
+          linePositions[offset + 1] = waveHeight(sx, sz, time);
+          linePositions[offset + 2] = sz;
+          linePositions[offset + 3] = tx;
+          linePositions[offset + 4] = waveHeight(tx, tz, time);
+          linePositions[offset + 5] = tz;
+        });
+        lineGeometry.attributes.position.needsUpdate = true;
+      };
+
+      const applyTheme = () => {
+        const isDark = document.documentElement.dataset.theme === "dark"
+          || (!document.documentElement.dataset.theme && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        material.uniforms.uBaseColor.value.set(isDark ? 0x7899c8 : 0x4e6f9a);
+        material.uniforms.uHumanColor.value.set(isDark ? 0xf1f7ff : 0x244f80);
+        material.uniforms.uAgentColor.value.set(isDark ? 0x77a6ff : 0x145ee8);
+        material.uniforms.uBaseAlpha.value = isDark ? 0.64 : 0.44;
+        lineMaterial.color.set(isDark ? 0x8bb2ff : 0x2f70ed);
+        lineMaterial.opacity = isDark ? 0.34 : 0.23;
+      };
+
+      applyTheme();
+      const themeObserver = new MutationObserver(applyTheme);
+      themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+      const resize = () => {
+        const rect = field.getBoundingClientRect();
+        const pixelRatio = Math.min(window.devicePixelRatio, compact ? 1.35 : 1.8);
+        renderer.setPixelRatio(pixelRatio);
+        renderer.setSize(rect.width, rect.height, false);
+        material.uniforms.uPixelRatio.value = pixelRatio;
+        camera.aspect = rect.width / Math.max(rect.height, 1);
+        camera.updateProjectionMatrix();
+      };
+
+      const resizeObserver = new ResizeObserver(resize);
+      resizeObserver.observe(field);
+      resize();
+
+      let animationFrame = 0;
+      let visible = true;
+      const startTime = performance.now();
+
+      const render = () => {
+        const time = reduceMotion ? 0.7 : (performance.now() - startTime) / 1000;
+        material.uniforms.uTime.value = time;
+        updateConnections(time);
+        renderer.render(scene, camera);
+        if (!reduceMotion && visible) animationFrame = requestAnimationFrame(render);
+      };
+
+      const visibilityObserver = new IntersectionObserver(([entry]) => {
+        visible = entry.isIntersecting;
+        cancelAnimationFrame(animationFrame);
+        if (visible) {
+          render();
+        }
+      }, { threshold: 0.01 });
+      visibilityObserver.observe(field);
+
+      if (reduceMotion) render();
+
+      window.addEventListener("pagehide", () => {
+        cancelAnimationFrame(animationFrame);
+        visibilityObserver.disconnect();
+        resizeObserver.disconnect();
+        themeObserver.disconnect();
+        geometry.dispose();
+        material.dispose();
+        lineGeometry.dispose();
+        lineMaterial.dispose();
+        renderer.dispose();
+      }, { once: true });
+    }
+  }
+</script>
+
+<style>
+  .hero-particle-field {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 1;
+    -webkit-mask-image: linear-gradient(180deg, transparent 1%, #000 13%, #000 86%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 1%, #000 13%, #000 86%, transparent 100%);
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 820px) {
+    .hero-particle-field {
+      opacity: 0.82;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-particle-field {
+      opacity: 0.76;
+    }
+  }
+</style>
